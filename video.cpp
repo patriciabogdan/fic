@@ -195,9 +195,9 @@ int main(int argc, char* argv[])
 	//create slider bars for HSV filtering
 	createTrackbars();
 	//video capture object to acquire webcam feed
-	VideoCapture capture;
+	VideoCapture capture("rtsp://172.16.254.170:8554/");
 	//open capture object at location zero (default location for webcam)
-	capture.open("rtmp://172.16.254.63/live/live");
+	// capture.open("rtsp://172.16.254.170:8554/");
 	//set height and width of capture frame
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT);
@@ -206,20 +206,13 @@ int main(int argc, char* argv[])
 
 
 
-	
-	while (1) {
+
+	while (capture.isOpened()) {
 
 
 		//store image to matrix
 		capture.read(cameraFeed);
 		//convert frame from BGR to HSV colorspace
-    if(cameraFeed.empty())
-     
-     return 1;
-     else
-     {
-       
-     
 		cvtColor(cameraFeed, HSV, COLOR_BGR2HSV);
 		//filter HSV image between values and store filtered image to
 		//threshold matrix
@@ -242,9 +235,7 @@ int main(int argc, char* argv[])
 		//delay 30ms so that screen can refresh.
 		//image will not appear without this waitKey() command
 		waitKey(30);
-   }
 	}
 
 	return 0;
 }
-
